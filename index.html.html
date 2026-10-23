@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <title>Обратный отсчёт — 1 ноября 2026</title>
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; display: grid; place-items: center;
+      padding: 24px; font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+      color: #f8fafc;
+      background: radial-gradient(ellipse at top, #243653 0%, #101827 55%, #090e18 100%);
+    }
+    main { width: min(760px, 100%); text-align: center; }
+    .eyebrow { color: #a9bad3; text-transform: uppercase; letter-spacing: .18em; font-size: .78rem; }
+    h1 { font-size: clamp(2rem, 6vw, 4rem); line-height: 1.08; margin: 18px 0 12px; }
+    .subtitle { color: #a9bad3; margin: 0 0 38px; font-size: 1rem; }
+    .timer { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+    .unit {
+      padding: clamp(16px, 4vw, 28px) 8px; border-radius: 18px;
+      background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12);
+      box-shadow: 0 16px 40px rgba(0,0,0,.15);
+    }
+    .number { font-size: clamp(2rem, 7vw, 4rem); font-weight: 750; font-variant-numeric: tabular-nums; line-height: 1.1; }
+    .label { color: #a9bad3; margin-top: 10px; font-size: .88rem; }
+    #message { margin-top: 28px; color: #c6d3e5; min-height: 1.5em; }
+    footer { margin-top: 54px; color: #71839c; font-size: .78rem; }
+    @media (max-width: 480px) { .timer { gap: 7px; } .unit { border-radius: 12px; } .label { font-size: .75rem; } }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="eyebrow">Обратный отсчёт до</div>
+    <h1>1 ноября 2026</h1>
+    <p class="subtitle">Время до наступления указанной даты</p>
+    <section class="timer" aria-label="Оставшееся время">
+      <div class="unit"><div class="number" id="days">00</div><div class="label">дней</div></div>
+      <div class="unit"><div class="number" id="hours">00</div><div class="label">часов</div></div>
+      <div class="unit"><div class="number" id="minutes">00</div><div class="label">минут</div></div>
+      <div class="unit"><div class="number" id="seconds">00</div><div class="label">секунд</div></div>
+    </section>
+    <div id="message" role="status"></div>
+    <footer>Отсчёт обновляется автоматически</footer>
+  </main>
+  <script>
+    // Дата отсчитывается до полуночи 1 ноября 2026 года по времени устройства посетителя.
+    const deadline = new Date(2026, 10, 1, 0, 0, 0).getTime();
+    const pad = n => String(n).padStart(2, '0');
+    function updateCountdown() {
+      const remaining = deadline - Date.now();
+      const message = document.getElementById('message');
+      if (remaining <= 0) {
+        ['days', 'hours', 'minutes', 'seconds'].forEach(id => document.getElementById(id).textContent = '00');
+        message.textContent = 'Наступило 1 ноября 2026 года.';
+        return;
+      }
+      const totalSeconds = Math.floor(remaining / 1000);
+      document.getElementById('days').textContent = pad(Math.floor(totalSeconds / 86400));
+      document.getElementById('hours').textContent = pad(Math.floor((totalSeconds % 86400) / 3600));
+      document.getElementById('minutes').textContent = pad(Math.floor((totalSeconds % 3600) / 60));
+      document.getElementById('seconds').textContent = pad(totalSeconds % 60);
+      message.textContent = '';
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>
